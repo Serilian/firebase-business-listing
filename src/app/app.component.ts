@@ -10,6 +10,8 @@ import {Business, Category, FirebaseService} from './services/firebase.service';
 })
 export class AppComponent implements OnInit {
 
+  appState: string;
+  activeKey: string;
 
   businesses: Business[];
 
@@ -28,6 +30,13 @@ export class AppComponent implements OnInit {
       (categories) => {
         this.categories = categories;
       });
+  }
+
+  changeState(state, key) {
+    if (key) {
+      this.activeKey = key;
+    }
+    this.appState = state;
   }
 
 }
