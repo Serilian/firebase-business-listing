@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {FirebaseListObservable} from 'angularfire2/database-deprecated';
 import {AngularFirestore, AngularFirestoreCollection} from 'angularfire2/firestore';
 import {Observable} from 'rxjs';
 
@@ -13,19 +12,30 @@ export class FirebaseService {
   categories: Observable<Category[]>;
 
   constructor(private asf: AngularFirestore) {
-    this.businessesCollection = asf.collection<Business>('businesses');
+
     this.categoriesCollection = asf.collection<Category>('categories');
 
   }
 
-  getBusinesses() {
-    this.businesses = this.businessesCollection.valueChanges();
+  getBusinesses(category: string = null) {
+    if (category != null) {
+      this.businessesCollection = this.asf.collection<Business>('businesses', ref => ref.where('category', '==', category));
+      this.businesses = this.businessesCollection.valueChanges();
+    } else {
+      this.businessesCollection = this.asf.collection<Business>('businesses');
+      this.businesses = this.businessesCollection.valueChanges();
+    }
+
     return this.businesses;
   }
 
   getCategories() {
     this.categories = this.categoriesCollection.valueChanges();
     return this.categories;
+  }
+
+  addBusiness(business): Promise<any> {
+    return this.businessesCollection.add(business);
   }
 
 

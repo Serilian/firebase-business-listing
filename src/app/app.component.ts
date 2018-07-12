@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.appState = 'default';
     this.fireService.getBusinesses().subscribe(
       (businesses) => {
         this.businesses = businesses;
@@ -32,11 +33,40 @@ export class AppComponent implements OnInit {
       });
   }
 
-  changeState(state, key) {
+  changeState(state, key = null) {
     if (key) {
       this.activeKey = key;
     }
     this.appState = state;
+  }
+
+  filterCategory(category) {
+    this.fireService.getBusinesses(category).subscribe(
+      businesses => {
+        this.businesses = businesses;
+      }
+    );
+  }
+
+  addBusiness(company, category, years, description, phone, email, street, city, state, zip) {
+    const created_at = new Date().toString();
+    const newBusiness = {
+      company: company,
+      Description: description,
+      category: category,
+      years_in_business: years,
+      street_sddres: street,
+      city: city,
+      state: state,
+      zipcode: zip,
+      phone: phone,
+      email: email,
+      created_at: created_at
+    };
+    console.log(newBusiness);
+    this.fireService.addBusiness(newBusiness);
+    this.changeState('default');
+
   }
 
 }
