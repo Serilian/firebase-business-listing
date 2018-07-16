@@ -38,6 +38,13 @@ export class FirebaseService {
     return this.businessesCollection.add(business);
   }
 
+  updateBusiness(key, updatedBusiness): Promise <any> {
+   return this.businessesCollection.doc<Business>(key).update(updatedBusiness);
+  }
+
+  deleteBusiness(key): Promise<any> {
+    return this.businessesCollection.doc(key).delete();
+  }
 
 }
 

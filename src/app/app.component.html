@@ -21,10 +21,13 @@
   </div>
   <hr>
 
+  <!--ADD Business-->
+
   <div *ngIf="appState == 'add'">
     <div class="col-md-12">
       <h3>Add business</h3>
-      <form (submit)="addBusiness(company.value,category.value,yearsInBusiness.value,description.value,phone.value,email.value,street.value,city.value,state.value,zip.value)">
+      <form
+        (submit)="addBusiness(company.value,category.value,yearsInBusiness.value,description.value,phone.value,email.value,street.value,city.value,state.value,zip.value)">
         <div class="row ">
           <div class="col-sm-6 form-inline my-2">
             <label for="company" class="col-form-label mx-2">Company: </label>
@@ -89,6 +92,77 @@
       </form>
     </div>
   </div>
+  <!--EDIT form-->
+
+  <div *ngIf="appState == 'edit'">
+    <div class="col-md-12">
+      <h3>Edit business</h3>
+      <form
+        (submit)="updateBusiness()">
+        <div class="row ">
+          <div class="col-sm-6 form-inline my-2">
+            <label for="company" class="col-form-label mx-2">Company: </label>
+            <input [(ngModel)]="editedCompany" name="editedCompany" class="form-control" type="text" id="editedCompany" #company placeholder="Company name"/>
+          </div>
+          <div class="col-sm-6 form-inline my-2">
+            <label class="col-form-label mx-2" for="category">Category: </label>
+            <select id="editedcategory" #category class="form-control" [(ngModel)]="editedCategory" name="editedCategory">
+              <option value="0">Select</option>
+              <option *ngFor="let category of categories" value="{{category.name}}">{{category.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 form-inline my-2">
+            <label for="yearsInBusiness" class="col-form-label mx-2">Years in busines: </label>
+            <input class="form-control" type="number" id="editedyearsInBusiness" #yearsInBusiness
+                   [(ngModel)]="editedYearsInBusiness" name="editedYearsInBusiness" placeholder="Years in business"/>
+          </div>
+          <div class="col-sm-6 my-2 form-group">
+            <label class="mx-2" for="description">Description </label>
+            <textarea id="editeddescription" #description class="form-control" [(ngModel)]="editedDescription" name="editedDescription" rows="5">
+             </textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 form-inline my-2">
+            <label for="phone" class="col-form-label mx-2">Phone: </label>
+            <input class="form-control" type="text" id="editedphone" #phone [(ngModel)]="editedPhone" name="editedPhone"
+                   placeholder="phone"/>
+          </div>
+          <div class="col-sm-6 my-2 form-inline">
+            <label class="mx-2" for="email">Email: </label>
+            <input type="email" id="editedemail" #email class="form-control" [(ngModel)]="editedEmail" name="editedEmail"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 form-inline my-2">
+            <label for="city" class="col-form-label mx-2">City: </label>
+            <input class="form-control" type="text" id="editedcity" #city [(ngModel)]="editedCity" name="editedCity" placeholder="City"/>
+          </div>
+          <div class="col-sm-6 my-2 form-inline">
+            <label class="mx-2" for="street">Street: </label>
+            <input type="text" id="editedstreet" #street class="form-control" [(ngModel)]="editedStreet" name="editedStreet"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 form-inline my-2">
+            <label for="zip" class="col-form-label mx-2">Zipcode: </label>
+            <input class="form-control" type="text" id="editedzip" #zip [(ngModel)]="editedZipcode" name="editedZipcode"
+                   placeholder="ZipCode"/>
+          </div>
+          <div class="col-sm-6 my-2 form-inline">
+            <label class="mx-2" for="state">State: </label>
+            <input type="text" id="editedstate" #state class="form-control" [(ngModel)]="editedState" name="editedState"/>
+          </div>
+        </div>
+        <div class="row">
+          <input type="submit" class="btn btn-outline-dark" value="Submit"/>
+        </div>
+      </form>
+    </div>
+  </div>
+
 
 
   <div *ngIf="appState == 'extend'" class="mt-5">
@@ -99,30 +173,29 @@
     </div>
 
 
-    <div *ngFor="let business of businesses">
-      <div *ngIf="business.$key == activeKey">
-        <div class="row">
-          <div class="col-md-5 offset-md-1">
-            <h3>{{business.company}}</h3>
-            <p>Category: {{business.category}}</p>
-            <p>Years In Business: {{business.years_in_business}}
-            <p>{{business.Description}}</p>
-          </div>
-          <div class="col-md-5">
-            <h3>Contact Info</h3>
-            <ul>
-              <li>Phone: {{business.phone}}</li>
-              <li>Email: {{business.email}}</li>
-              <li>Street: {{business.street_sddres}}</li>
-              <li>City: {{business.city}}</li>
-              <li>State: {{business.state}}</li>
-              <li>Zipcode: {{business.zipcode}}</li>
-            </ul>
-          </div>
+    <div *ngFor="let business of businesses" >
+      <div class="row" *ngIf="business.company === activeCompany">
+        <div class="col-md-5 offset-md-1">
+          <h3>{{business.company}}</h3>
+          <p>Category: {{business.category}}</p>
+          <p>Years In Business: {{business.years_in_business}}
+          <p>{{business.Description}}</p>
+        </div>
+        <div class="col-md-5">
+          <h3>Contact Info</h3>
+          <ul>
+            <li>Phone: {{business.phone}}</li>
+            <li>Email: {{business.email}}</li>
+            <li>Street: {{business.street_sddres}}</li>
+            <li>City: {{business.city}}</li>
+            <li>State: {{business.state}}</li>
+            <li>Zipcode: {{business.zipcode}}</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
+
 
   <div class="row my-4">
     <div class="col-md-12">
@@ -137,14 +210,14 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let business of businesses">
-            <td>{{business.company}}</td>
-            <td>{{business.category}}</td>
-            <td>{{business.phone}}</td>
+          <tr *ngFor="let item of businesses">
+            <td>{{item.company}}</td>
+            <td>{{item.category}}</td>
+            <td>{{item.phone}}</td>
             <td>
-              <button (click)="changeState('extend', business.$key)" class="btn btn-outline-dark mx-1">More</button>
-              <button class="btn btn-primary mx-1">Edit</button>
-              <button class="btn btn-danger mx-1">Delete</button>
+              <button (click)="changeState('extend', item.company)" class="btn btn-outline-dark mx-1">More</button>
+              <button class="btn btn-primary mx-1" (click)="showEdit(item)">Edit</button>
+              <button class="btn btn-danger mx-1" (click)="deleteBusiness(item.$key)">Delete</button>
             </td>
           </tr>
           </tbody>
